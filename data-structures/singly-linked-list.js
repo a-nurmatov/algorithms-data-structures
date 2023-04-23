@@ -101,15 +101,36 @@ class SinglyLinkedList {
     let newNode = new Node(value);
     newNode.next = node.next;
     node.next = newNode;
+    this.length++;
 
     return true;
   }
 
   remove(index) {
+    if (index < 0 || index >= this.length) return false;
     if (index === 0) return !!this.shift();
     if (index === this.length - 1) return !!this.pop();
 
-    let node = this.get(index - 1);
+    let prevNode = this.get(index - 1);
+    let removed = prevNode.next;
+    prevNode.next = removed.next;
+    this.length--;
+    return true;
+  }
+
+  reverse() {
+    let node = this.head;
+    this.head = this.tail;
+    this.tail = node;
+    let next;
+    let prev = null;
+    for (let i = 0; i < this.length; i++) {
+      next = node.next;
+      node.next = prev;
+      prev = node;
+      node = next;
+    }
+    return this;
   }
 }
 
@@ -119,6 +140,5 @@ const list = new SinglyLinkedList();
 
 list.push("Hi");
 list.push("Go");
-list.insert(1, "Let me go");
-console.log(list.get(1));
+list.reverse();
 console.log(list);
